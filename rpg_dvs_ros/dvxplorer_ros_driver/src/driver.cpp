@@ -284,6 +284,7 @@ void DvxplorerRosDriver::readout() {
 
 	dvs_msgs::EventArrayPtr event_array_msg;
 	std_msgs::Float32MultiArrayPtr event_array1_msg;
+	std_msgs::Int32 event_size_msg;
 
         int initEvents = 0; // extra line
 	const int netEvents = 40000;
@@ -321,6 +322,8 @@ void DvxplorerRosDriver::readout() {
 					caerPolarityEventPacket polarity = (caerPolarityEventPacket) packetHeader;
 
 					const int numEvents = caerEventPacketHeaderGetEventNumber(packetHeader);
+					event_size_msg.data = numEvents;
+
 					for (int j = 0; j < numEvents; j++) {
 						// Get full timestamp and addresses of first event.
 						caerPolarityEvent event = caerPolarityEventPacketGetEvent(polarity, j);
@@ -369,7 +372,6 @@ void DvxplorerRosDriver::readout() {
 
 					int streaming_rate = streaming_rate_;
 					int max_events     = max_events_;
-					int count = event_array_msg->events.size();
 
 					// throttle event messages
                                         //if (count <= max_events){
