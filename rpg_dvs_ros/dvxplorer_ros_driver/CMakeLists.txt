@@ -36,6 +36,11 @@ target_link_libraries(dvxplorer_ros_driver_nodelet
   libcaer::caer
 )
 
+
+catkin_install_python(PROGRAMS scripts/subEvent.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 # Install the nodelet library
 cs_install()
 

@@ -134,7 +134,7 @@ void Renderer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
         cv_image.image = cv::Mat(msg->height, msg->width, CV_8UC3);
         cv_image.image = cv::Scalar(0,0,0);
       }
-
+      //std::cout<<"msg:"<<msg->events.size()<<std::endl;
       for (int i = 0; i < msg->events.size(); ++i)
       {
         const int x = msg->events[i].x;
@@ -175,6 +175,7 @@ void Renderer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
         else
           off_events.at<uint8_t>(cv::Point(x, y))++;
       }
+
 
         // scale image
       cv::normalize(on_events, on_events, 0, 128, cv::NORM_MINMAX, CV_8UC1);
