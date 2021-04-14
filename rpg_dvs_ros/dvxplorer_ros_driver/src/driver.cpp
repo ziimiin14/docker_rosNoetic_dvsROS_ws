@@ -380,7 +380,7 @@ void DvxplorerRosDriver::readout() {
                                                 //std::cout<< event_array1_msg->data.size() <<std::endl;
 						event_array_pub_.publish(event_array_msg);
 						event_array1_pub_.publish(event_array1_msg);
-						event_size_pub_.publish(count);
+						event_size_pub_.publish(event_size_msg);
 
 						if (streaming_rate > 0) {
 							next_send_time += delta_;
