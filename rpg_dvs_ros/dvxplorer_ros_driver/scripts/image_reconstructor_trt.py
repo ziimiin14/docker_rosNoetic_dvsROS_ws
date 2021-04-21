@@ -22,7 +22,6 @@ class ImageReconstructor:
         self.height = height # 240 
         self.width = width # 320
         self.num_bins = num_bins # 5
-        self.out = None
 
         self.initialize(self.height, self.width, options)
 
@@ -70,6 +69,7 @@ class ImageReconstructor:
                     events = events.to(self.device)
 
                 events = self.event_preprocessor(events)
+                events = events.type(torch.float16)
 
                 # Resize tensor to [1 x C x crop_size x crop_size] by applying zero padding
                 events_for_each_channel = {'grayscale': self.crop.pad(events)}
@@ -100,6 +100,7 @@ class ImageReconstructor:
                     # print(new_predicted_frame.shape) ## ([1,1,240,320])
 
                     # Unsharp mask (on GPU)
+                    # new_predicted_frame = new_predicted_frame.type(torch.float32)
                     new_predicted_frame = self.unsharp_mask_filter(new_predicted_frame)
 
                     # Intensity rescaler (on GPU)
@@ -112,11 +113,10 @@ class ImageReconstructor:
                 if self.perform_color_reconstruction:
                     out = merge_channels_into_color_image(reconstructions_for_each_channel)
                 else:
-                    out = reconstructions_for_each_channel['grayscale']
+                    self.out = reconstructions_for_each_channel['grayscale']
 
             # Post-processing, e.g bilateral filter (on CPU)
-            self.out = self.image_filter(out)
+            #self.out = self.image_filter(out)
 
-
-            self.image_writer(out, event_tensor_id, stamp, events=events)
-            self.image_display(out, events)
+            #self.image_writer(out, event_tensor_id, stamp, events=events)
+            #self.image_display(out, events)
